@@ -3869,6 +3869,7 @@ function _VirtualDom_dekey(keyedNode)
 		b: keyedNode.b
 	};
 }
+var author$project$Main$baseUrl = 'http://localhost:8000/';
 var elm$core$Basics$identity = function (x) {
 	return x;
 };
@@ -4363,13 +4364,95 @@ var elm$virtual_dom$VirtualDom$toHandlerInt = function (handler) {
 	}
 };
 var elm$html$Html$div = _VirtualDom_node('div');
+var elm$html$Html$h2 = _VirtualDom_node('h2');
+var elm$html$Html$img = _VirtualDom_node('img');
 var elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var elm$html$Html$text = elm$virtual_dom$VirtualDom$text;
+var elm$json$Json$Encode$string = _Json_wrap;
+var elm$html$Html$Attributes$stringProperty = F2(
+	function (key, string) {
+		return A2(
+			_VirtualDom_property,
+			key,
+			elm$json$Json$Encode$string(string));
+	});
+var elm$html$Html$Attributes$class = elm$html$Html$Attributes$stringProperty('className');
+var elm$html$Html$Attributes$src = function (url) {
+	return A2(
+		elm$html$Html$Attributes$stringProperty,
+		'src',
+		_VirtualDom_noJavaScriptOrHtmlUri(url));
+};
+var author$project$Main$viewDetailedPhoto = F2(
+	function (imgUrl, caption) {
+		return A2(
+			elm$html$Html$div,
+			_List_fromArray(
+				[
+					elm$html$Html$Attributes$class('detailed-photo')
+				]),
+			_List_fromArray(
+				[
+					A2(
+					elm$html$Html$img,
+					_List_fromArray(
+						[
+							elm$html$Html$Attributes$src(imgUrl)
+						]),
+					_List_Nil),
+					A2(
+					elm$html$Html$div,
+					_List_fromArray(
+						[
+							elm$html$Html$Attributes$class('photo-info')
+						]),
+					_List_fromArray(
+						[
+							A2(
+							elm$html$Html$h2,
+							_List_fromArray(
+								[
+									elm$html$Html$Attributes$class('caption')
+								]),
+							_List_fromArray(
+								[
+									elm$html$Html$text(caption)
+								]))
+						]))
+				]));
+	});
+var elm$html$Html$h1 = _VirtualDom_node('h1');
 var author$project$Main$main = A2(
 	elm$html$Html$div,
 	_List_Nil,
 	_List_fromArray(
 		[
-			elm$html$Html$text('Hello world!!!')
+			A2(
+			elm$html$Html$div,
+			_List_fromArray(
+				[
+					elm$html$Html$Attributes$class('header')
+				]),
+			_List_fromArray(
+				[
+					A2(
+					elm$html$Html$h1,
+					_List_Nil,
+					_List_fromArray(
+						[
+							elm$html$Html$text('Lorem Photos')
+						]))
+				])),
+			A2(
+			elm$html$Html$div,
+			_List_fromArray(
+				[
+					elm$html$Html$Attributes$class('content-flow')
+				]),
+			_List_fromArray(
+				[
+					A2(author$project$Main$viewDetailedPhoto, author$project$Main$baseUrl + 'lorem-pic-happy.jpg', 'Happiness'),
+					A2(author$project$Main$viewDetailedPhoto, author$project$Main$baseUrl + 'lorem-pic-build.jpg', 'Work')
+				]))
 		]));
 _Platform_export({'Main':{'init':_VirtualDom_init(author$project$Main$main)(0)(0)}});}(this));
