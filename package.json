@@ -1,0 +1,20 @@
+{
+  "name": "elm-hello-world",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "elm:dev": "elm-live ./src/Main.elm -- --output=main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/przemwo/elm-hello-world.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/przemwo/elm-hello-world/issues"
+  },
+  "homepage": "https://github.com/przemwo/elm-hello-world#readme"
+}
