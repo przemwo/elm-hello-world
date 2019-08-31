@@ -9,22 +9,30 @@ baseUrl =
     "http://localhost:8000/"
 
 
-viewDetailedPhoto : String -> String -> Html msg
-viewDetailedPhoto imgUrl caption =
+initialModel : { url : String, caption : String }
+initialModel =
+    { url = baseUrl ++ "lorem-pic-happy.jpg", caption = "Happiness!" }
+
+
+viewDetailedPhoto : { url : String, caption : String } -> Html msg
+viewDetailedPhoto model =
     div [ class "detailed-photo" ]
-        [ img [ src imgUrl ] []
+        [ img [ src model.url ] []
         , div [ class "photo-info" ]
-            [ h2 [ class "caption" ] [ text caption ] ]
+            [ h2 [ class "caption" ] [ text model.caption ] ]
+        ]
+
+
+view : { url : String, caption : String } -> Html msg
+view model =
+    div []
+        [ div [ class "header" ]
+            [ h1 [] [ text "Lorem Photos" ] ]
+        , div [ class "content-flow" ]
+            [ viewDetailedPhoto model ]
         ]
 
 
 main : Html msg
 main =
-    div []
-        [ div [ class "header" ]
-            [ h1 [] [ text "Lorem Photos" ] ]
-        , div [ class "content-flow" ]
-            [ viewDetailedPhoto (baseUrl ++ "lorem-pic-happy.jpg") "Happiness"
-            , viewDetailedPhoto (baseUrl ++ "lorem-pic-build.jpg") "Work"
-            ]
-        ]
+    view initialModel
