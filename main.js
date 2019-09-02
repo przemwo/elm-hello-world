@@ -3870,6 +3870,7 @@ function _VirtualDom_dekey(keyedNode)
 	};
 }
 var author$project$Main$baseUrl = 'http://localhost:8000/';
+var elm$core$Basics$True = {$: 'True'};
 var elm$core$Elm$JsArray$foldr = _JsArray_foldr;
 var elm$core$Array$foldr = F3(
 	function (func, baseCase, _n0) {
@@ -3951,12 +3952,13 @@ var elm$core$Set$toList = function (_n0) {
 	return elm$core$Dict$keys(dict);
 };
 var elm$core$Basics$append = _Utils_append;
-var author$project$Main$initialModel = {caption: 'Happiness!', url: author$project$Main$baseUrl + 'lorem-pic-happy.jpg'};
+var author$project$Main$initialModel = {caption: 'Happiness!', liked: true, url: author$project$Main$baseUrl + 'lorem-pic-happy.jpg'};
+var author$project$Main$Like = {$: 'Like'};
+var author$project$Main$Unlike = {$: 'Unlike'};
 var elm$core$Basics$identity = function (x) {
 	return x;
 };
 var elm$core$Basics$False = {$: 'False'};
-var elm$core$Basics$True = {$: 'True'};
 var elm$core$Result$isOk = function (result) {
 	if (result.$ === 'Ok') {
 		return true;
@@ -4384,7 +4386,38 @@ var elm$html$Html$Attributes$src = function (url) {
 		'src',
 		_VirtualDom_noJavaScriptOrHtmlUri(url));
 };
+var elm$virtual_dom$VirtualDom$Normal = function (a) {
+	return {$: 'Normal', a: a};
+};
+var elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
+var elm$html$Html$Events$on = F2(
+	function (event, decoder) {
+		return A2(
+			elm$virtual_dom$VirtualDom$on,
+			event,
+			elm$virtual_dom$VirtualDom$Normal(decoder));
+	});
+var elm$html$Html$Events$onClick = function (msg) {
+	return A2(
+		elm$html$Html$Events$on,
+		'click',
+		elm$json$Json$Decode$succeed(msg));
+};
 var author$project$Main$viewDetailedPhoto = function (model) {
+	var msg = model.liked ? author$project$Main$Unlike : author$project$Main$Like;
+	var button = model.liked ? A2(
+		elm$html$Html$div,
+		_List_Nil,
+		_List_fromArray(
+			[
+				elm$html$Html$text('Liked!')
+			])) : A2(
+		elm$html$Html$div,
+		_List_Nil,
+		_List_fromArray(
+			[
+				elm$html$Html$text('Not liked!')
+			]));
 	return A2(
 		elm$html$Html$div,
 		_List_fromArray(
@@ -4408,6 +4441,14 @@ var author$project$Main$viewDetailedPhoto = function (model) {
 					]),
 				_List_fromArray(
 					[
+						A2(
+						elm$html$Html$div,
+						_List_fromArray(
+							[
+								elm$html$Html$Events$onClick(msg)
+							]),
+						_List_fromArray(
+							[button])),
 						A2(
 						elm$html$Html$h2,
 						_List_fromArray(

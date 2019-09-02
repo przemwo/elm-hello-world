@@ -2,6 +2,7 @@ module Main exposing (main)
 
 import Html exposing (..)
 import Html.Attributes exposing (class, src)
+import Html.Events exposing (onClick)
 
 
 baseUrl : String
@@ -9,21 +10,38 @@ baseUrl =
     "http://localhost:8000/"
 
 
-initialModel : { url : String, caption : String }
+initialModel : { url : String, caption : String, liked : Bool }
 initialModel =
-    { url = baseUrl ++ "lorem-pic-happy.jpg", caption = "Happiness!" }
+    { url = baseUrl ++ "lorem-pic-happy.jpg", caption = "Happiness!", liked = True }
 
 
-viewDetailedPhoto : { url : String, caption : String } -> Html msg
+viewDetailedPhoto : { url : String, caption : String, liked : Bool } -> Html Msg
 viewDetailedPhoto model =
+    let
+        button =
+            if model.liked then
+                div [] [ text "Liked!" ]
+
+            else
+                div [] [ text "Not liked!" ]
+
+        msg =
+            if model.liked then
+                Unlike
+
+            else
+                Like
+    in
     div [ class "detailed-photo" ]
         [ img [ src model.url ] []
         , div [ class "photo-info" ]
-            [ h2 [ class "caption" ] [ text model.caption ] ]
+            [ div [ onClick msg ] [ button ]
+            , h2 [ class "caption" ] [ text model.caption ]
+            ]
         ]
 
 
-view : { url : String, caption : String } -> Html msg
+view : { url : String, caption : String, liked : Bool } -> Html Msg
 view model =
     div []
         [ div [ class "header" ]
@@ -33,6 +51,11 @@ view model =
         ]
 
 
-main : Html msg
+type Msg
+    = Like
+    | Unlike
+
+
+main : Html Msg
 main =
     view initialModel
