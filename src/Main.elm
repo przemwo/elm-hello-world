@@ -1,5 +1,6 @@
 module Main exposing (main)
 
+import Browser
 import Html exposing (..)
 import Html.Attributes exposing (class, src)
 import Html.Events exposing (onClick)
@@ -56,6 +57,22 @@ type Msg
     | Unlike
 
 
-main : Html Msg
+update :
+    Msg
+    -> { url : String, caption : String, liked : Bool }
+    -> { url : String, caption : String, liked : Bool }
+update msg model =
+    case msg of
+        Like ->
+            { model | liked = True }
+
+        Unlike ->
+            { model | liked = False }
+
+
+main : Program () { url : String, caption : String, liked : Bool } Msg
 main =
-    view initialModel
+    Browser.sandbox
+        { init = initialModel
+        , view = view
+            , update = update}
