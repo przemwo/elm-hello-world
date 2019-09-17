@@ -2,12 +2,17 @@ module Main exposing (main)
 
 import Browser
 import Html exposing (..)
-import Html.Attributes exposing (class, src)
+import Html.Attributes exposing (class, placeholder, src, type_)
 import Html.Events exposing (onClick)
 
 
 type alias Model =
-    { url : String, caption : String, liked : Bool }
+    { url : String
+    , caption : String
+    , liked : Bool
+    , comments : List String
+    , newComment : String
+    }
 
 
 baseUrl : String
@@ -17,31 +22,54 @@ baseUrl =
 
 initialModel : Model
 initialModel =
-    { url = baseUrl ++ "lorem-pic-happy.jpg", caption = "Happiness!", liked = True }
+    { url = baseUrl ++ "lorem-pic-happy.jpg"
+    , caption = "Happiness!"
+    , liked = True
+    , comments = [ "Looks good!" ]
+    , newComment = ""
+    }
 
 
-viewDetailedPhoto : Model -> Html Msg
-viewDetailedPhoto model =
+viewComment : String -> Html Msg
+viewComment comment =
+    li []
+        [ strong [] [ text "Comment:" ]
+        , text (" " ++ comment)
+        ]
+
+
+viewCommentList : List String -> Html Msg
+viewCommentList comments =
+    case comments of
+        [] ->
+            text ""
+
+        _ ->
+            div [ class "comments" ]
+                [ ul [] (List.map viewComment comments) ]
+
+
+viewLoveButton : Model -> Html Msg
+viewLoveButton model =
     let
         button =
             if model.liked then
                 div [] [ text "Liked!" ]
 
             else
-                div [] [ text "Not liked!" ]
-
-        msg =
-            if model.liked then
-                Unlike
-
-            else
-                Like
+                div [] [ text "Not liked..." ]
     in
+    div [ onClick ToggleLike ] [ button ]
+
+
+viewDetailedPhoto : Model -> Html Msg
+viewDetailedPhoto model =
     div [ class "detailed-photo" ]
         [ img [ src model.url ] []
         , div [ class "photo-info" ]
-            [ div [ onClick msg ] [ button ]
+            [ viewLoveButton model
             , h2 [ class "caption" ] [ text model.caption ]
+            , viewCommentList model.comments
             ]
         ]
 
@@ -57,8 +85,7 @@ view model =
 
 
 type Msg
-    = Like
-    | Unlike
+    = ToggleLike
 
 
 update :
@@ -67,11 +94,8 @@ update :
     -> Model
 update msg model =
     case msg of
-        Like ->
-            { model | liked = True }
-
-        Unlike ->
-            { model | liked = False }
+        ToggleLike ->
+            { model | liked = not model.liked }
 
 
 main : Program () Model Msg
