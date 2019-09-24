@@ -2,8 +2,8 @@ module Main exposing (main)
 
 import Browser
 import Html exposing (..)
-import Html.Attributes exposing (class, placeholder, src, type_)
-import Html.Events exposing (onClick)
+import Html.Attributes exposing (class, disabled, placeholder, src, type_, value)
+import Html.Events exposing (onClick, onInput, onSubmit)
 
 
 type alias Model =
@@ -49,6 +49,25 @@ viewCommentList comments =
                 [ ul [] (List.map viewComment comments) ]
 
 
+viewComments : Model -> Html Msg
+viewComments model =
+    div []
+        [ viewCommentList model.comments
+        , form [ class "new-comment", onSubmit SaveComment ]
+            [ input
+                [ type_ "text"
+                , placeholder "Add a comment..."
+                , value model.newComment
+                , onInput UpdateComment
+                ]
+                []
+            , button
+                [ disabled (String.isEmpty model.newComment) ]
+                [ text "Save" ]
+            ]
+        ]
+
+
 viewLoveButton : Model -> Html Msg
 viewLoveButton model =
     let
@@ -69,7 +88,7 @@ viewDetailedPhoto model =
         , div [ class "photo-info" ]
             [ viewLoveButton model
             , h2 [ class "caption" ] [ text model.caption ]
-            , viewCommentList model.comments
+            , viewComments model
             ]
         ]
 
@@ -86,6 +105,25 @@ view model =
 
 type Msg
     = ToggleLike
+    | UpdateComment String
+    | SaveComment
+
+
+saveNewComment : Model -> Model
+saveNewComment model =
+    let
+        comment =
+            String.trim model.newComment
+    in
+    case comment of
+        "" ->
+            model
+
+        _ ->
+            { model
+                | comments = model.comments ++ [ comment ]
+                , newComment = ""
+            }
 
 
 update :
@@ -96,6 +134,12 @@ update msg model =
     case msg of
         ToggleLike ->
             { model | liked = not model.liked }
+
+        UpdateComment comment ->
+            { model | newComment = comment }
+
+        SaveComment ->
+            saveNewComment model
 
 
 main : Program () Model Msg
