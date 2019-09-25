@@ -4397,6 +4397,7 @@ var author$project$Main$initialModel = {
 	caption: 'Happiness!',
 	comments: _List_fromArray(
 		['Looks good!']),
+	id: 1,
 	liked: true,
 	newComment: '',
 	url: author$project$Main$baseUrl + 'lorem-pic-happy.jpg'
